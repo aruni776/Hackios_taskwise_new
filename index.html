@@ -9,101 +9,81 @@
 </head>
 <body>
 
-  <!-- NAVBAR -->
-  <nav class="topnav glass">
-    <div class="nav-left">
-      <span class="logo-text">TaskWise</span>
-      <input class="search" placeholder="Search tasks or members" />
+<nav class="pill-navbar">
+  <span class="logo">TaskWise</span>
+
+  <div class="nav-center">
+    <button class="nav-pill active" data-page="home">
+      <i class="ri-home-line"></i> Home
+    </button>
+    <button class="nav-pill" data-page="tasks">
+      <i class="ri-task-line"></i> Tasks
+    </button>
+    <button class="nav-pill" data-page="members">
+      <i class="ri-group-line"></i> Members
+    </button>
+    <button class="nav-pill" data-page="about">
+      <i class="ri-information-line"></i> About
+    </button>
+  </div>
+</nav>
+
+<main class="wrapper">
+
+  <section id="home" class="page active">
+    <div class="card hero">
+      <h1>TaskWise</h1>
+      <p>Organize tasks fairly and visually.</p>
+    </div>
+  </section>
+
+  <section id="tasks" class="page">
+    <div class="card">
+      <h2>Add Task</h2>
+
+      <input id="taskName" placeholder="Task name" />
+      <input id="taskAdded" type="date" />
+      <input id="taskDeadline" type="date" />
+
+      <select id="taskMember"></select>
+
+      <select id="taskStatus">
+        <option>Not Started yet</option>
+        <option>In-progress</option>
+        <option>Completed</option>
+      </select>
+
+      <button id="addTaskBtn">Add Task</button>
     </div>
 
-    <div class="nav-center">
-      <button data-page="home" class="active">Home</button>
-      <button data-page="tasks">Tasks</button>
-      <button data-page="members">Members</button>
-      <button data-page="about">About</button>
+    <div class="table">
+      <div class="row header">
+        <div>Task</div><div>Added</div><div>Deadline</div>
+        <div>Member</div><div>Status</div><div></div>
+      </div>
+      <div id="taskRows"></div>
+    </div>
+  </section>
+
+  <section id="members" class="page">
+    <div class="card">
+      <h2>Add Member</h2>
+      <input id="memberName" placeholder="Member name" />
+      <button id="addMemberBtn">Add Member</button>
     </div>
 
-    <div class="nav-right">Jatin</div>
-  </nav>
+    <div id="memberList" class="members"></div>
+  </section>
 
-  <!-- APP CONTENT -->
-  <main class="wrapper">
+  <section id="about" class="page">
+    <div class="card">
+      <h2>About</h2>
+      <p>Frontend-only task management MVP.</p>
+    </div>
+  </section>
 
-    <!-- HOME -->
-    <section id="home" class="page active">
-      <div class="hero">
-        <h1>TaskWise</h1>
-        <p>Manage shared tasks with clarity and fairness.</p>
-      </div>
-    </section>
+</main>
 
-    <!-- TASKS -->
-    <section id="tasks" class="page">
-      <h2>Tasks</h2>
-
-      <div class="card">
-        <label>Task name</label>
-        <input id="taskName">
-
-        <label>Date added</label>
-        <input type="date" id="taskAdded">
-
-        <label>Deadline</label>
-        <input type="date" id="taskDeadline">
-
-        <label>Assign to</label>
-        <select id="taskMember"></select>
-
-        <label>Status</label>
-        <select id="taskStatus">
-          <option>Not Started yet</option>
-          <option>In-progress</option>
-          <option>Completed</option>
-        </select>
-
-        <button id="addTaskBtn" class="action-btn">
-          <i class="ri-add-line"></i> Add Task
-        </button>
-      </div>
-
-      <div class="table card">
-        <div class="row header">
-          <div>Task</div>
-          <div>Added</div>
-          <div>Deadline</div>
-          <div>Assigned</div>
-          <div>Status</div>
-          <div></div>
-        </div>
-        <div id="taskRows"></div>
-      </div>
-    </section>
-
-    <!-- MEMBERS -->
-    <section id="members" class="page">
-      <h2>Members</h2>
-
-      <div class="card">
-        <label>Member name</label>
-        <input id="memberName">
-        <button id="addMemberBtn" class="action-btn">
-          <i class="ri-user-add-line"></i> Add Member
-        </button>
-      </div>
-
-      <div id="memberList" class="members"></div>
-    </section>
-
-    <!-- ABOUT -->
-    <section id="about" class="page">
-      <div class="card">
-        <h2>About TaskWise</h2>
-        <p>Frontend-only MVP for managing shared responsibilities.</p>
-      </div>
-    </section>
-
-  </main>
-
-  <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
-</html> 
+</html>

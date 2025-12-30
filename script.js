@@ -1,148 +1,100 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  /* ======================
-     STATE
-  ====================== */
-  let members = ["Jatin", "Aru"];
-  let tasks = [];
+  let members = JSON.parse(localStorage.getItem("members")) || ["Jatin","Aru"];
+  let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
-  /* ======================
-     ELEMENTS
-  ====================== */
   const pages = document.querySelectorAll(".page");
-  const navButtons = document.querySelectorAll(".nav-center button");
+  const navBtns = document.querySelectorAll(".nav-pill");
 
   const memberList = document.getElementById("memberList");
-  const memberNameInput = document.getElementById("memberName");
-  const taskMemberSelect = document.getElementById("taskMember");
-
+  const memberInput = document.getElementById("memberName");
+  const taskMember = document.getElementById("taskMember");
   const taskRows = document.getElementById("taskRows");
-  const taskNameInput = document.getElementById("taskName");
-  const taskAddedInput = document.getElementById("taskAdded");
-  const taskDeadlineInput = document.getElementById("taskDeadline");
-  const taskStatusSelect = document.getElementById("taskStatus");
 
-  const addMemberBtn = document.getElementById("addMemberBtn");
-  const addTaskBtn = document.getElementById("addTaskBtn");
+  function save() {
+    localStorage.setItem("members", JSON.stringify(members));
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }
 
-  /* ======================
-     NAVIGATION
-  ====================== */
-  navButtons.forEach(btn => {
-    btn.addEventListener("click", () => {
-      const pageId = btn.dataset.page;
-
+  navBtns.forEach(btn => {
+    btn.onclick = () => {
       pages.forEach(p => p.classList.remove("active"));
-      document.getElementById(pageId).classList.add("active");
-
-      navButtons.forEach(b => b.classList.remove("active"));
+      document.getElementById(btn.dataset.page).classList.add("active");
+      navBtns.forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
-    });
+    };
   });
 
-  /* ======================
-     MEMBERS
-  ====================== */
   function renderMembers() {
     memberList.innerHTML = "";
-    taskMemberSelect.innerHTML = "";
+    taskMember.innerHTML = "";
 
-    members.forEach(name => {
-      const initial = name.charAt(0).toUpperCase();
-
-      // Member Card
+    members.forEach((m,i)=>{
       const card = document.createElement("div");
-      card.className = "member-card card";
+      card.className="member-card";
       card.innerHTML = `
-        <div class="avatar-circle">${initial}</div>
-        <h3>${name}</h3>
+        <div class="avatar">${m[0]}</div>
+        <strong>${m}</strong>
+        <p>${tasks.filter(t=>t.member===m).length} tasks</p>
+        <button onclick="removeMember(${i})">Remove</button>
       `;
       memberList.appendChild(card);
 
-      // Dropdown option
       const opt = document.createElement("option");
-      opt.value = name;
-      opt.textContent = name;
-      taskMemberSelect.appendChild(opt);
+      opt.textContent = m;
+      taskMember.appendChild(opt);
     });
   }
 
-  addMemberBtn.addEventListener("click", () => {
-    const name = memberNameInput.value.trim();
-    if (!name || members.includes(name)) return;
-
-    members.push(name);
-    memberNameInput.value = "";
-    renderMembers();
-  });
-
-  /* ======================
-     TASKS
-  ====================== */
-  function getStatusClass(status) {
-    if (status === "In-progress") return "status-progress";
-    if (status === "Completed") return "status-completed";
-    return "status-todo";
-  }
+  window.removeMember = i => {
+    members.splice(i,1);
+    tasks = tasks.filter(t=>t.member!==members[i]);
+    save(); renderMembers(); renderTasks();
+  };
 
   function renderTasks() {
-    taskRows.innerHTML = "";
-
-    tasks.forEach((t, index) => {
+    taskRows.innerHTML="";
+    tasks.forEach((t,i)=>{
+      const cls = t.status==="Completed"?"done":t.status==="In-progress"?"progress":"todo";
       const row = document.createElement("div");
-      row.className = "row";
-
-      const statusClass = getStatusClass(t.status);
-
+      row.className="row";
       row.innerHTML = `
         <div>${t.name}</div>
         <div>${t.added}</div>
         <div>${t.deadline}</div>
         <div>${t.member}</div>
-        <div>
-          <span class="status-pill ${statusClass}">
-            ${t.status}
-          </span>
-        </div>
-        <div>
-          <button data-index="${index}">
-            <i class="ri-delete-bin-line"></i>
-          </button>
-        </div>
+        <div><span class="${cls}">${t.status}</span></div>
+        <div><button onclick="removeTask(${i})">✕</button></div>
       `;
-
       taskRows.appendChild(row);
     });
-
-    // Delete handlers
-    taskRows.querySelectorAll("button").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const idx = btn.dataset.index;
-        tasks.splice(idx, 1);
-        renderTasks();
-      });
-    });
+    save();
   }
 
-  addTaskBtn.addEventListener("click", () => {
-    if (!taskNameInput.value) return;
+  window.removeTask = i => {
+    tasks.splice(i,1);
+    renderTasks(); renderMembers();
+  };
 
-    const task = {
-      name: taskNameInput.value,
-      added: taskAddedInput.value,
-      deadline: taskDeadlineInput.value,
-      member: taskMemberSelect.value,
-      status: taskStatusSelect.value
-    };
+  document.getElementById("addMemberBtn").onclick = () => {
+    if(!memberInput.value) return;
+    members.push(memberInput.value);
+    memberInput.value="";
+    renderMembers(); save();
+  };
 
-    tasks.push(task);
+  document.getElementById("addTaskBtn").onclick = () => {
+    tasks.push({
+      name:taskName.value,
+      added:taskAdded.value,
+      deadline:taskDeadline.value,
+      member:taskMember.value,
+      status:taskStatus.value
+    });
+    taskName.value="";
+    renderTasks(); renderMembers();
+  };
 
-    taskNameInput.value = "";
-    renderTasks();
-  });
-
-  /* ======================
-     INIT
-  ====================== */
   renderMembers();
+  renderTasks();
 });
