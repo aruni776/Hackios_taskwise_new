@@ -3,10 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TaskWise v2.14</title>
+  <title>TaskWise v3.1 Ultimate</title>
 
   <!-- Google Font -->
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <!-- External CSS -->
   <link rel="stylesheet" href="style.css">
@@ -30,11 +33,11 @@
   </div>
 
   <div class="auth-card">
-    <h1>Welcome to TaskWise</h1>
-    <p>Let's get you set up.</p>
+    <h1>TaskWise v3.1</h1>
+    <p>The Ultimate Project Manager</p>
 
     <label>Your Name</label>
-    <input id="authName">
+    <input id="authName" placeholder="e.g. Jatin">
 
     <label>Your Role</label>
     <select id="authRole" onchange="toggleTeamInput()">
@@ -44,30 +47,11 @@
     </select>
 
     <label id="teamLabel">Create Team</label>
-    <input id="authTeam">
+    <input id="authTeam" placeholder="e.g. Engineering">
 
     <button class="primary-btn" onclick="completeAuth()">Get Started</button>
   </div>
 </div>
-
-<!-- EDIT MEMBER MODAL -->
-<div id="editMemberModal" class="modal-overlay">
-  <div class="glass modal-card">
-    <h3>Edit Member</h3>
-    <input id="editMemberName">
-    <select id="editMemberRole">
-      <option>Admin</option>
-      <option>Member</option>
-      <option>Viewer</option>
-    </select>
-    <button onclick="saveMemberEdit()">Save</button>
-    <button onclick="closeModal()">Cancel</button>
-  </div>
-</div>
-
-<input type="file" id="avatarUpload" hidden>
-<canvas id="confetti-canvas"></canvas>
-<div id="toast-container"></div>
 
 <!-- NAVBAR -->
 <div class="topnav" id="navbar">
@@ -76,42 +60,48 @@
   </div>
 
   <div class="center">
-    <button class="active" onclick="showPage('home')">Home</button>
+    <button class="active" onclick="showPage('home')">Dashboard</button>
     <button onclick="showPage('tasks')">Tasks</button>
     <button onclick="showPage('team')">Team</button>
-    <button onclick="showPage('about')">About</button>
+    <button onclick="showPage('about')">Settings</button>
   </div>
 
   <div class="right">
-    <div>
-      <div id="navUserName">User</div>
-      <div id="navUserTeam">Team</div>
-    </div>
-    <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+    <button class="theme-toggle" onclick="toggleTheme()">
+      <span id="theme-icon">🌙</span>
+    </button>
     <button class="logout-btn" onclick="logout()">⎋</button>
   </div>
 </div>
 
+<!-- MAIN CONTENT -->
 <div class="wrapper" id="mainContent">
 
   <!-- HOME -->
   <section id="home" class="page active">
-    <h1>Organize your team with modern simplicity</h1>
-    <button onclick="showPage('tasks')">Launch Dashboard</button>
+    <h1>Welcome back, <span id="heroName">User</span></h1>
+    <canvas id="taskChart"></canvas>
+    <div id="aiAnalysisResult" class="glass"></div>
   </section>
 
   <!-- TASKS -->
   <section id="tasks" class="page">
-    <input class="search" id="searchInput" onkeyup="handleSearch()">
+    <h2>Task Board</h2>
+    <input class="search" id="searchInput" placeholder="Search..." onkeyup="handleSearch()">
 
     <div class="kanban-board">
       <div class="kanban-column" ondrop="drop(event,'Not Started')" ondragover="allowDrop(event)">
+        <h3>To Do</h3>
         <div id="list-todo"></div>
       </div>
+
       <div class="kanban-column" ondrop="drop(event,'In Progress')" ondragover="allowDrop(event)">
+        <h3>In Progress</h3>
         <div id="list-progress"></div>
       </div>
+
       <div class="kanban-column" ondrop="drop(event,'Completed')" ondragover="allowDrop(event)">
+        <h3>Done</h3>
         <div id="list-done"></div>
       </div>
     </div>
@@ -119,12 +109,13 @@
 
   <!-- TEAM -->
   <section id="team" class="page">
-    <h2 id="displayTeamName"></h2>
+    <h2 id="displayTeamName">Team</h2>
     <div id="memberCards" class="members-grid"></div>
   </section>
 
-  <!-- ABOUT -->
+  <!-- SETTINGS -->
   <section id="about" class="page">
+    <h2>Settings</h2>
     <button onclick="exportData()">Export</button>
     <button onclick="clearData()">Factory Reset</button>
   </section>
@@ -133,5 +124,6 @@
 
 <!-- External JS -->
 <script src="script.js"></script>
+
 </body>
 </html>

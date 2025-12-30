@@ -1,19 +1,38 @@
 let members = [];
 let tasks = [];
 let currentUser = null;
-let editingId = null;
-let activeMemberFilter = null;
+let chartInstance = null;
 let isDarkMode = localStorage.getItem('tw_darkmode') === 'true';
+
+/* INIT */
+document.addEventListener("DOMContentLoaded", () => {
+  updateThemeUI(isDarkMode);
+
+  const ctx = document.getElementById("taskChart").getContext("2d");
+  chartInstance = new Chart(ctx, {
+    type: "doughnut",
+    data: {
+      labels: ["To Do", "In Progress", "Done"],
+      datasets: [{ data: [0, 0, 0] }]
+    }
+  });
+});
 
 /* THEME */
 function toggleTheme() {
   isDarkMode = !isDarkMode;
-  localStorage.setItem('tw_darkmode', isDarkMode);
+  localStorage.setItem("tw_darkmode", isDarkMode);
   updateThemeUI(isDarkMode);
 }
 
 function updateThemeUI(dark) {
-  document.body.classList.toggle('dark-mode', dark);
+  document.body.classList.toggle("dark-mode", dark);
+}
+
+/* NAVIGATION */
+function showPage(id) {
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
 }
 
 /* AUTH */
@@ -23,36 +42,29 @@ function completeAuth() {
   if (!name || !team) return alert("Fill all fields");
 
   currentUser = { name, team };
-  localStorage.setItem('tw_current_user', JSON.stringify(currentUser));
-  checkAuth();
+  heroName.textContent = name;
+  authScreen.style.display = "none";
 }
 
+/* LOGOUT */
 function logout() {
-  localStorage.clear();
   location.reload();
 }
 
-/* NAV */
-function showPage(id) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-}
-
 /* DRAG DROP */
-function allowDrop(e) { e.preventDefault(); }
-function drop(e, status) { e.preventDefault(); }
-
-/* STORAGE */
-function saveData() {
-  localStorage.setItem('tw_members', JSON.stringify(members));
-  localStorage.setItem('tw_tasks', JSON.stringify(tasks));
+function allowDrop(e) {
+  e.preventDefault();
 }
 
-/* INIT */
-document.addEventListener("DOMContentLoaded", () => {
-  members = JSON.parse(localStorage.getItem('tw_members')) || [];
-  tasks = JSON.parse(localStorage.getItem('tw_tasks')) || [];
-  currentUser = JSON.parse(localStorage.getItem('tw_current_user')) || null;
-  updateThemeUI(isDarkMode);
-  checkAuth();
-});
+function drop(e, status) {
+  e.preventDefault();
+}
+
+/* UTILS */
+function exportData() {
+  alert("Export coming soon");
+}
+
+function clearData() {
+  if (confirm("Factory reset?")) localStorage.clear(), location.reload();
+}

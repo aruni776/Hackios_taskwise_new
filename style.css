@@ -1,13 +1,11 @@
-/* ROOT VARIABLES */
 :root {
   --primary-grad: linear-gradient(135deg, #b1121f, #ff4d5e);
   --bg-color: #f0f2f5;
-  --glass: rgba(255,255,255,0.6);
+  --glass: rgba(255,255,255,0.65);
   --text: #1d1d1f;
   --danger: #f5222d;
 }
 
-/* DARK MODE */
 body.dark-mode {
   --bg-color: #0f0f12;
   --glass: rgba(20,20,20,0.7);
@@ -25,45 +23,57 @@ body {
   color: var(--text);
 }
 
-/* GLASS */
 .glass {
   background: var(--glass);
-  backdrop-filter: blur(24px);
-  border-radius: 24px;
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 20px;
 }
 
-/* NAVBAR */
 .topnav {
   display: flex;
   justify-content: space-between;
   padding: 20px;
 }
 
-/* KANBAN */
+.brand {
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.page {
+  display: none;
+}
+
+.page.active {
+  display: block;
+}
+
 .kanban-board {
   display: grid;
   grid-template-columns: repeat(3,1fr);
   gap: 20px;
 }
 
-/* BUTTONS */
+.kanban-column {
+  background: var(--glass);
+  padding: 15px;
+  border-radius: 16px;
+}
+
 .primary-btn {
   background: var(--primary-grad);
-  color: white;
+  color: #fff;
   border: none;
   padding: 12px;
   border-radius: 12px;
+  cursor: pointer;
 }
 
 .logout-btn {
-  color: var(--danger);
   background: none;
   border: none;
-}
-
-/* MEMBERS */
-.members-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
-  gap: 24px;
+  color: var(--danger);
+  font-size: 1.2rem;
+  cursor: pointer;
 }
