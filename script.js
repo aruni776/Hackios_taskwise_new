@@ -1,5 +1,6 @@
-let members = JSON.parse(localStorage.getItem('tw_members')) || [];
-let tasks = JSON.parse(localStorage.getItem('tw_tasks')) || [];
+let members = [];
+let tasks = [];
+let currentUser = null;
 let editingId = null;
 let activeMemberFilter = null;
 let isDarkMode = localStorage.getItem('tw_darkmode') === 'true';
@@ -7,35 +8,39 @@ let isDarkMode = localStorage.getItem('tw_darkmode') === 'true';
 /* THEME */
 function toggleTheme() {
   isDarkMode = !isDarkMode;
-  document.body.classList.toggle('dark-mode');
   localStorage.setItem('tw_darkmode', isDarkMode);
+  updateThemeUI(isDarkMode);
 }
 
-/* NAVIGATION */
+function updateThemeUI(dark) {
+  document.body.classList.toggle('dark-mode', dark);
+}
+
+/* AUTH */
+function completeAuth() {
+  const name = authName.value.trim();
+  const team = authTeam.value.trim();
+  if (!name || !team) return alert("Fill all fields");
+
+  currentUser = { name, team };
+  localStorage.setItem('tw_current_user', JSON.stringify(currentUser));
+  checkAuth();
+}
+
+function logout() {
+  localStorage.clear();
+  location.reload();
+}
+
+/* NAV */
 function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
 
-/* DRAG & DROP */
+/* DRAG DROP */
 function allowDrop(e) { e.preventDefault(); }
 function drop(e, status) { e.preventDefault(); }
-
-/* TASKS */
-function saveTask() {
-  const name = document.getElementById('taskName').value;
-  if(!name) return;
-  tasks.push({ id: Date.now(), name, status: 'Not Started' });
-  saveData();
-}
-
-/* MEMBERS */
-function addMember() {
-  const name = document.getElementById('memberName').value;
-  if(!name) return;
-  members.push({ name });
-  saveData();
-}
 
 /* STORAGE */
 function saveData() {
@@ -43,9 +48,11 @@ function saveData() {
   localStorage.setItem('tw_tasks', JSON.stringify(tasks));
 }
 
-/* SEARCH */
-function handleSearch() {}
-
-/* EXPORT / RESET */
-function exportData() {}
-function clearData() { localStorage.clear(); location.reload(); }
+/* INIT */
+document.addEventListener("DOMContentLoaded", () => {
+  members = JSON.parse(localStorage.getItem('tw_members')) || [];
+  tasks = JSON.parse(localStorage.getItem('tw_tasks')) || [];
+  currentUser = JSON.parse(localStorage.getItem('tw_current_user')) || null;
+  updateThemeUI(isDarkMode);
+  checkAuth();
+});

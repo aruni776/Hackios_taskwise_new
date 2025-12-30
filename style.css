@@ -1,14 +1,16 @@
+/* ROOT VARIABLES */
 :root {
   --primary-grad: linear-gradient(135deg, #b1121f, #ff4d5e);
   --bg-color: #f0f2f5;
-  --glass: rgba(255, 255, 255, 0.6);
+  --glass: rgba(255,255,255,0.6);
   --text: #1d1d1f;
+  --danger: #f5222d;
 }
 
 /* DARK MODE */
 body.dark-mode {
   --bg-color: #0f0f12;
-  --glass: rgba(20, 20, 20, 0.7);
+  --glass: rgba(20,20,20,0.7);
   --text: #e0e0e0;
 }
 
@@ -41,7 +43,7 @@ body {
 .kanban-board {
   display: grid;
   grid-template-columns: repeat(3,1fr);
-  gap: 24px;
+  gap: 20px;
 }
 
 /* BUTTONS */
@@ -49,8 +51,14 @@ body {
   background: var(--primary-grad);
   color: white;
   border: none;
-  padding: 14px;
+  padding: 12px;
   border-radius: 12px;
+}
+
+.logout-btn {
+  color: var(--danger);
+  background: none;
+  border: none;
 }
 
 /* MEMBERS */

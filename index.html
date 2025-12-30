@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TaskWise v2.4</title>
+  <title>TaskWise v2.14</title>
 
   <!-- Google Font -->
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -14,53 +14,95 @@
 
 <body>
 
-<!-- HIDDEN FILE INPUT FOR AVATAR UPLOAD -->
-<input type="file" id="avatarUpload" hidden accept="image/*">
+<!-- CURSOR GLOW -->
+<div id="cursor-glow"></div>
 
 <!-- BACKGROUND ORBS -->
 <div class="bg-orb orb-1"></div>
 <div class="bg-orb orb-2"></div>
 
+<!-- AUTH SCREEN -->
+<div id="authScreen" class="auth-screen">
+  <div class="auth-toggle-wrapper">
+    <button class="theme-toggle" onclick="toggleTheme()">
+      <span id="theme-icon-auth">🌙</span>
+    </button>
+  </div>
+
+  <div class="auth-card">
+    <h1>Welcome to TaskWise</h1>
+    <p>Let's get you set up.</p>
+
+    <label>Your Name</label>
+    <input id="authName">
+
+    <label>Your Role</label>
+    <select id="authRole" onchange="toggleTeamInput()">
+      <option>Admin</option>
+      <option>Member</option>
+      <option>Viewer</option>
+    </select>
+
+    <label id="teamLabel">Create Team</label>
+    <input id="authTeam">
+
+    <button class="primary-btn" onclick="completeAuth()">Get Started</button>
+  </div>
+</div>
+
+<!-- EDIT MEMBER MODAL -->
+<div id="editMemberModal" class="modal-overlay">
+  <div class="glass modal-card">
+    <h3>Edit Member</h3>
+    <input id="editMemberName">
+    <select id="editMemberRole">
+      <option>Admin</option>
+      <option>Member</option>
+      <option>Viewer</option>
+    </select>
+    <button onclick="saveMemberEdit()">Save</button>
+    <button onclick="closeModal()">Cancel</button>
+  </div>
+</div>
+
+<input type="file" id="avatarUpload" hidden>
 <canvas id="confetti-canvas"></canvas>
 <div id="toast-container"></div>
 
 <!-- NAVBAR -->
-<div class="topnav">
+<div class="topnav" id="navbar">
   <div class="left">
-    <div class="logo-container" onclick="showPage('home')">
-      <span class="brand">TaskWise</span>
-    </div>
+    <span class="brand">TaskWise</span>
   </div>
 
   <div class="center">
     <button class="active" onclick="showPage('home')">Home</button>
     <button onclick="showPage('tasks')">Tasks</button>
-    <button onclick="showPage('members')">Members</button>
+    <button onclick="showPage('team')">Team</button>
     <button onclick="showPage('about')">About</button>
   </div>
 
   <div class="right">
+    <div>
+      <div id="navUserName">User</div>
+      <div id="navUserTeam">Team</div>
+    </div>
     <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
-    <input class="search" id="searchInput" placeholder="Search tasks & members..." onkeyup="handleSearch()">
+    <button class="logout-btn" onclick="logout()">⎋</button>
   </div>
 </div>
 
-<div class="wrapper">
+<div class="wrapper" id="mainContent">
 
   <!-- HOME -->
   <section id="home" class="page active">
-    <div class="glass hero">
-      <h1>Organize your team with modern simplicity</h1>
-      <button class="primary-btn" onclick="showPage('tasks')">Launch Dashboard</button>
-    </div>
+    <h1>Organize your team with modern simplicity</h1>
+    <button onclick="showPage('tasks')">Launch Dashboard</button>
   </section>
 
   <!-- TASKS -->
   <section id="tasks" class="page">
-    <div class="glass card">
-      <input id="taskName" placeholder="Task title">
-      <button class="primary-btn" onclick="saveTask()">Create Task</button>
-    </div>
+    <input class="search" id="searchInput" onkeyup="handleSearch()">
 
     <div class="kanban-board">
       <div class="kanban-column" ondrop="drop(event,'Not Started')" ondragover="allowDrop(event)">
@@ -75,16 +117,15 @@
     </div>
   </section>
 
-  <!-- MEMBERS -->
-  <section id="members" class="page">
-    <input id="memberName" placeholder="Member name">
-    <button class="primary-btn" onclick="addMember()">Add Member</button>
+  <!-- TEAM -->
+  <section id="team" class="page">
+    <h2 id="displayTeamName"></h2>
     <div id="memberCards" class="members-grid"></div>
   </section>
 
   <!-- ABOUT -->
   <section id="about" class="page">
-    <button onclick="exportData()">Export Data</button>
+    <button onclick="exportData()">Export</button>
     <button onclick="clearData()">Factory Reset</button>
   </section>
 
