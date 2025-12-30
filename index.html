@@ -2,88 +2,95 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>TaskWise</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TaskWise v2.4</title>
 
-  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-  <link rel="stylesheet" href="style.css" />
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- External CSS -->
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<nav class="pill-navbar">
-  <span class="logo">TaskWise</span>
+<!-- HIDDEN FILE INPUT FOR AVATAR UPLOAD -->
+<input type="file" id="avatarUpload" hidden accept="image/*">
 
-  <div class="nav-center">
-    <button class="nav-pill active" data-page="home">
-      <i class="ri-home-line"></i> Home
-    </button>
-    <button class="nav-pill" data-page="tasks">
-      <i class="ri-task-line"></i> Tasks
-    </button>
-    <button class="nav-pill" data-page="members">
-      <i class="ri-group-line"></i> Members
-    </button>
-    <button class="nav-pill" data-page="about">
-      <i class="ri-information-line"></i> About
-    </button>
+<!-- BACKGROUND ORBS -->
+<div class="bg-orb orb-1"></div>
+<div class="bg-orb orb-2"></div>
+
+<canvas id="confetti-canvas"></canvas>
+<div id="toast-container"></div>
+
+<!-- NAVBAR -->
+<div class="topnav">
+  <div class="left">
+    <div class="logo-container" onclick="showPage('home')">
+      <span class="brand">TaskWise</span>
+    </div>
   </div>
-</nav>
 
-<main class="wrapper">
+  <div class="center">
+    <button class="active" onclick="showPage('home')">Home</button>
+    <button onclick="showPage('tasks')">Tasks</button>
+    <button onclick="showPage('members')">Members</button>
+    <button onclick="showPage('about')">About</button>
+  </div>
 
+  <div class="right">
+    <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+    <input class="search" id="searchInput" placeholder="Search tasks & members..." onkeyup="handleSearch()">
+  </div>
+</div>
+
+<div class="wrapper">
+
+  <!-- HOME -->
   <section id="home" class="page active">
-    <div class="card hero">
-      <h1>TaskWise</h1>
-      <p>Organize tasks fairly and visually.</p>
+    <div class="glass hero">
+      <h1>Organize your team with modern simplicity</h1>
+      <button class="primary-btn" onclick="showPage('tasks')">Launch Dashboard</button>
     </div>
   </section>
 
+  <!-- TASKS -->
   <section id="tasks" class="page">
-    <div class="card">
-      <h2>Add Task</h2>
-
-      <input id="taskName" placeholder="Task name" />
-      <input id="taskAdded" type="date" />
-      <input id="taskDeadline" type="date" />
-
-      <select id="taskMember"></select>
-
-      <select id="taskStatus">
-        <option>Not Started yet</option>
-        <option>In-progress</option>
-        <option>Completed</option>
-      </select>
-
-      <button id="addTaskBtn">Add Task</button>
+    <div class="glass card">
+      <input id="taskName" placeholder="Task title">
+      <button class="primary-btn" onclick="saveTask()">Create Task</button>
     </div>
 
-    <div class="table">
-      <div class="row header">
-        <div>Task</div><div>Added</div><div>Deadline</div>
-        <div>Member</div><div>Status</div><div></div>
+    <div class="kanban-board">
+      <div class="kanban-column" ondrop="drop(event,'Not Started')" ondragover="allowDrop(event)">
+        <div id="list-todo"></div>
       </div>
-      <div id="taskRows"></div>
+      <div class="kanban-column" ondrop="drop(event,'In Progress')" ondragover="allowDrop(event)">
+        <div id="list-progress"></div>
+      </div>
+      <div class="kanban-column" ondrop="drop(event,'Completed')" ondragover="allowDrop(event)">
+        <div id="list-done"></div>
+      </div>
     </div>
   </section>
 
+  <!-- MEMBERS -->
   <section id="members" class="page">
-    <div class="card">
-      <h2>Add Member</h2>
-      <input id="memberName" placeholder="Member name" />
-      <button id="addMemberBtn">Add Member</button>
-    </div>
-
-    <div id="memberList" class="members"></div>
+    <input id="memberName" placeholder="Member name">
+    <button class="primary-btn" onclick="addMember()">Add Member</button>
+    <div id="memberCards" class="members-grid"></div>
   </section>
 
+  <!-- ABOUT -->
   <section id="about" class="page">
-    <div class="card">
-      <h2>About</h2>
-      <p>Frontend-only task management MVP.</p>
-    </div>
+    <button onclick="exportData()">Export Data</button>
+    <button onclick="clearData()">Factory Reset</button>
   </section>
 
-</main>
+</div>
 
+<!-- External JS -->
 <script src="script.js"></script>
 </body>
 </html>
