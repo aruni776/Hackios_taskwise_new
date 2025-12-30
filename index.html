@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>TaskWise</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="topnav glass">
+    <div class="nav-left">
+      <span class="logo-text">TaskWise</span>
+      <input class="search" placeholder="Search tasks or members" />
+    </div>
+
+    <div class="nav-center">
+      <button data-page="home" class="active">Home</button>
+      <button data-page="tasks">Tasks</button>
+      <button data-page="members">Members</button>
+      <button data-page="about">About</button>
+    </div>
+
+    <div class="nav-right">Jatin</div>
+  </nav>
+
+  <!-- APP CONTENT -->
+  <main class="wrapper">
+
+    <!-- HOME -->
+    <section id="home" class="page active">
+      <div class="hero">
+        <h1>TaskWise</h1>
+        <p>Manage shared tasks with clarity and fairness.</p>
+      </div>
+    </section>
+
+    <!-- TASKS -->
+    <section id="tasks" class="page">
+      <h2>Tasks</h2>
+
+      <div class="card">
+        <label>Task name</label>
+        <input id="taskName">
+
+        <label>Date added</label>
+        <input type="date" id="taskAdded">
+
+        <label>Deadline</label>
+        <input type="date" id="taskDeadline">
+
+        <label>Assign to</label>
+        <select id="taskMember"></select>
+
+        <label>Status</label>
+        <select id="taskStatus">
+          <option>Not Started yet</option>
+          <option>In-progress</option>
+          <option>Completed</option>
+        </select>
+
+        <button id="addTaskBtn" class="action-btn">
+          <i class="ri-add-line"></i> Add Task
+        </button>
+      </div>
+
+      <div class="table card">
+        <div class="row header">
+          <div>Task</div>
+          <div>Added</div>
+          <div>Deadline</div>
+          <div>Assigned</div>
+          <div>Status</div>
+          <div></div>
+        </div>
+        <div id="taskRows"></div>
+      </div>
+    </section>
+
+    <!-- MEMBERS -->
+    <section id="members" class="page">
+      <h2>Members</h2>
+
+      <div class="card">
+        <label>Member name</label>
+        <input id="memberName">
+        <button id="addMemberBtn" class="action-btn">
+          <i class="ri-user-add-line"></i> Add Member
+        </button>
+      </div>
+
+      <div id="memberList" class="members"></div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="page">
+      <div class="card">
+        <h2>About TaskWise</h2>
+        <p>Frontend-only MVP for managing shared responsibilities.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html> 
